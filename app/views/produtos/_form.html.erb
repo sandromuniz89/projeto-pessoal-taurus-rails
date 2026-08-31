@@ -1,0 +1,46 @@
+<div style="background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 2rem; color: #fff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);">
+  <%= form_with(model: produto, local: true) do |f| %>
+    <% if produto.errors.any? %>
+      <div style="color: #f87171; background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.3); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <p style="margin: 0; font-weight: bold;"><%= pluralize(produto.errors.count, "erro") %> impediram este produto de ser salvo:</p>
+        <ul style="margin: 0.5rem 0 0 1rem; padding: 0; font-size: 0.9rem;">
+          <% produto.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div style="margin-bottom: 1.2rem;">
+      <%= f.label :nome, "Nome do Produto", style: "display: block; margin-bottom: 0.4rem; font-weight: 600; color: #cbd5e1; font-size: 0.9rem;" %>
+      <%= f.text_field :nome, required: true, placeholder: "Ex: Teclado Mecânico RGB", style: "width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem;" %>
+    </div>
+
+    <div style="margin-bottom: 1.2rem;">
+      <%= f.label :imagem, "Foto do Produto", style: "display: block; margin-bottom: 0.4rem; font-weight: 600; color: #cbd5e1; font-size: 0.9rem;" %>
+      <%= f.file_field :imagem, accept: "image/*", style: "width: 100%; padding: 0.6rem; background: #0f172a; border: 1px dashed #475569; color: #94a3b8; border-radius: 8px; box-sizing: border-box; font-size: 0.9rem;" %>
+    </div>
+
+    <div style="margin-bottom: 1.2rem;">
+      <%= f.label :descricao, "Descrição", style: "display: block; margin-bottom: 0.4rem; font-weight: 600; color: #cbd5e1; font-size: 0.9rem;" %>
+      <%= f.text_area :descricao, rows: 4, placeholder: "Detalhes do produto, características e especificações...", style: "width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem; line-height: 1.5;" %>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 2rem;">
+      <div>
+        <%= f.label :preco, "Preço Unitário (R$)", style: "display: block; margin-bottom: 0.4rem; font-weight: 600; color: #cbd5e1; font-size: 0.9rem;" %>
+        <%= f.number_field :preco, step: "0.01", required: true, placeholder: "0,00", style: "width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem;" %>
+      </div>
+
+      <div>
+        <%= f.label :estoque, "Quantidade em Estoque", style: "display: block; margin-bottom: 0.4rem; font-weight: 600; color: #cbd5e1; font-size: 0.9rem;" %>
+        <%= f.number_field :estoque, required: true, placeholder: "0", style: "width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem;" %>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #334155; padding-top: 1.5rem;">
+      <%= link_to "← Voltar para Vitrine", produtos_path, style: "color: #94a3b8; text-decoration: none; font-size: 0.95rem; font-weight: 500;" %>
+      <%= f.submit produto.new_record? ? "Cadastrar Produto" : "Salvar Alterações", style: "background: #2563eb; color: #fff; padding: 0.75rem 1.8rem; border: none; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer;" %>
+    </div>
+  <% end %>
+</div>

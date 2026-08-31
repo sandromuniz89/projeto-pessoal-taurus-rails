@@ -1,0 +1,56 @@
+<div style="max-width: 580px; margin: 2rem auto; background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 2.2rem; color: #fff; text-align: center; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);">
+
+  <% if @pedido.status == "approved" %>
+    <div style="background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); padding: 2rem; border-radius: 12px; margin-bottom: 1.5rem;">
+      <p style="font-size: 3.5rem; margin: 0;">🎉</p>
+      <h2 style="color: #34d399; margin: 0.5rem 0 0.2rem 0; font-size: 1.6rem; font-weight: 800;">Pagamento Confirmado!</h2>
+      <p style="color: #cbd5e1; font-size: 0.95rem; margin-top: 0.4rem;">Seu pedido <strong>#<%= @pedido.id %></strong> foi aprovado com sucesso.</p>
+    </div>
+  <% else %>
+    <h2 style="color: #38bdf8; margin: 0 0 0.5rem 0; font-size: 1.8rem; font-weight: 800;">⚡ Pagamento via PIX</h2>
+    <p style="color: #94a3b8; margin: 0 0 1.5rem 0;">Pedido <strong>#<%= @pedido.id %></strong> • Total: <strong style="color: #34d399;"><%= number_to_currency(@pedido.total, unit: "R$ ", separator: ",", delimiter: ".") %></strong></p>
+
+    <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; padding: 0.6rem; border-radius: 8px; margin-bottom: 1.5rem; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+      <span style="display: inline-block; width: 8px; height: 8px; background: #fbbf24; border-radius: 50%;"></span>
+      Aguardando confirmação do banco...
+    </div>
+
+    <% if @pedido.pix_qrcode_base64.present? %>
+      <div style="background: #fff; padding: 1rem; border-radius: 12px; display: inline-block; margin-bottom: 1.2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);">
+        <img src="data:image/png;base64,<%= @pedido.pix_qrcode_base64 %>" alt="QR Code PIX" style="width: 200px; height: 200px; display: block;" />
+      </div>
+    <% end %>
+
+    <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 0.6rem;">Ou use o código Copia e Cola:</p>
+
+    <div style="margin-bottom: 1rem;">
+      <textarea id="pixCode" readonly style="width: 100%; height: 75px; background: #0f172a; border: 1px solid #334155; color: #38bdf8; border-radius: 8px; padding: 0.6rem; font-family: monospace; font-size: 0.78rem; box-sizing: border-box; resize: none;"><%= @pedido.pix_copia_e_cola %></textarea>
+    </div>
+
+    <button type="button" onclick="copiarPix()" id="btnCopiar" style="background: #2563eb; color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; width: 100%; margin-bottom: 1.5rem; transition: background 0.2s;">
+      📋 Copiar Chave PIX
+    </button>
+  <% end %>
+
+  <div style="border-top: 1px solid #334155; padding-top: 1.5rem;">
+    <%= link_to "← Voltar para a Loja", produtos_path, style: "color: #94a3b8; text-decoration: none; font-size: 0.95rem;" %>
+  </div>
+</div>
+
+<script>
+  function copiarPix() {
+    const copyText = document.getElementById("pixCode");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+
+    const btn = document.getElementById("btnCopiar");
+    btn.innerText = "✅ Código Copiado!";
+    btn.style.background = "#10b981";
+
+    setTimeout(() => {
+      btn.innerText = "📋 Copiar Chave PIX";
+      btn.style.background = "#2563eb";
+    }, 2500);
+  }
+</script>

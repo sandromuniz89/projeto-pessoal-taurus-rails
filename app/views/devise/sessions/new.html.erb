@@ -1,0 +1,33 @@
+<div style="max-width: 440px; margin: 3rem auto; background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 2.2rem; color: #fff; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);">
+  
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <h1 style="margin: 0; font-size: 1.8rem; font-weight: 800; color: #38bdf8;">Acessar Conta</h1>
+    <p style="color: #94a3b8; margin: 0.4rem 0 0 0; font-size: 0.95rem;">Digite suas credenciais para continuar</p>
+  </div>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <div style="margin-bottom: 1.2rem;">
+      <%= f.label :email, "E-mail", style: "display: block; margin-bottom: 0.4rem; font-weight: 600; color: #cbd5e1; font-size: 0.9rem;" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "seu@email.com", required: true, style: "width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem;" %>
+    </div>
+
+    <div style="margin-bottom: 1.2rem;">
+      <%= f.label :password, "Senha", style: "display: block; margin-bottom: 0.4rem; font-weight: 600; color: #cbd5e1; font-size: 0.9rem;" %>
+      <%= f.password_field :password, autocomplete: "current-password", placeholder: "••••••••", required: true, style: "width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem;" %>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; color: #94a3b8; font-size: 0.85rem;">
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me, "Lembrar de mim" %>
+      </div>
+    <% end %>
+
+    <%= f.submit "Entrar", style: "width: 100%; background: #2563eb; color: #fff; padding: 0.85rem; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer;" %>
+  <% end %>
+
+  <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid #334155; font-size: 0.9rem; color: #94a3b8;">
+    Não tem uma conta? 
+    <%= link_to "Criar Conta", new_cliente_registration_path, style: "color: #38bdf8; text-decoration: none; font-weight: 600;" %>
+  </div>
+</div>

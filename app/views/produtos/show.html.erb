@@ -1,0 +1,58 @@
+<div style="max-width: 1000px; margin: 2rem auto; background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 2rem; color: #fff; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);">
+  
+  <% if notice.present? %>
+    <p style="color: #34d399; background: rgba(52, 211, 153, 0.1); padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-weight: 600; border: 1px solid rgba(52, 211, 153, 0.2);"><%= notice %></p>
+  <% end %>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start;">
+    
+    <!-- Imagem em Destaque -->
+    <div style="background-color: #0f172a; border-radius: 12px; overflow: hidden; height: 380px; display: flex; align-items: center; justify-content: center; border: 1px solid #334155;">
+      <% if @produto.imagem.attached? %>
+        <%= image_tag @produto.imagem, style: "width: 100%; height: 100%; object-fit: cover;" %>
+      <% else %>
+        <span style="font-size: 5rem; color: #64748b;">📦</span>
+      <% end %>
+    </div>
+
+    <!-- Informações de Compra -->
+    <div>
+      <h1 style="margin: 0 0 0.5rem 0; font-size: 1.8rem; font-weight: 800; color: #fff;"><%= @produto.nome %></h1>
+      
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+        <span style="background: <%= @produto.estoque.to_i > 0 ? 'rgba(52, 211, 153, 0.15)' : 'rgba(248, 113, 113, 0.15)' %>; color: <%= @produto.estoque.to_i > 0 ? '#34d399' : '#f87171' %>; border: 1px solid <%= @produto.estoque.to_i > 0 ? 'rgba(52, 211, 153, 0.3)' : 'rgba(248, 113, 113, 0.3)' %>; padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: 700; font-size: 0.85rem;">
+          <%= @produto.estoque.to_i > 0 ? "Disponível (#{@produto.estoque} un.)" : "Esgotado" %>
+        </span>
+      </div>
+
+      <div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #334155;">
+        <span style="font-size: 2.2rem; font-weight: 800; color: #38bdf8; display: block;">
+          <%= number_to_currency(@produto.preco, unit: "R$ ", separator: ",", delimiter: ".") %>
+        </span>
+        <small style="color: #34d399; font-size: 0.95rem; font-weight: 600; display: block; margin-top: 0.3rem;">⚡ Pagamento exclusivo via PIX com liberação imediata</small>
+      </div>
+
+      <p style="color: #cbd5e1; line-height: 1.6; margin-bottom: 2rem;">
+        <%= @produto.descricao.presence || "Sem descrição disponível para este plano." %>
+      </p>
+
+      <!-- Ação de Compra: Adicionar ao Carrinho -->
+      <div style="margin-bottom: 1.5rem;">
+        <%= button_to item_carrinhos_path(produto_id: @produto.id), method: :post, style: "width: 100%; background: #2563eb; color: #fff; border: none; padding: 1rem; border-radius: 10px; font-size: 1.05rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);" do %>
+          🛒 Adicionar ao Carrinho
+        <% end %>
+      </div>
+
+      <!-- Links Administrativos -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #334155; padding-top: 1.2rem; font-size: 0.9rem;">
+        <%= link_to "← Voltar para a Loja", produtos_path, style: "color: #94a3b8; text-decoration: none;" %>
+        
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <%= link_to "Editar", edit_produto_path(@produto), style: "color: #38bdf8; font-weight: 600; text-decoration: none;" %>
+          <%= button_to "Excluir", @produto, method: :delete, data: { turbo_confirm: "Tem certeza que deseja excluir?" }, style: "background: none; border: none; color: #f87171; font-weight: 600; cursor: pointer; padding: 0;" %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cliente: one
+  total: 9.99
+  status: MyString
+  mp_payment_id: MyString
+  pix_copia_e_cola: MyText
+  pix_qrcode_base64: MyText
+
+two:
+  cliente: two
+  total: 9.99
+  status: MyString
+  mp_payment_id: MyString
+  pix_copia_e_cola: MyText
+  pix_qrcode_base64: MyText

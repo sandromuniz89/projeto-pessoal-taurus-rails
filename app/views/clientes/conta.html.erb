@@ -1,0 +1,88 @@
+<div style="max-width: 1000px; margin: 2rem auto; display: flex; flex-direction: column; gap: 2rem;">
+
+  <% if notice.present? %>
+    <p style="color: #34d399; background: rgba(52, 211, 153, 0.1); padding: 0.75rem 1rem; border-radius: 8px; font-weight: 600; border: 1px solid rgba(52, 211, 153, 0.2); margin: 0;"><%= notice %></p>
+  <% end %>
+
+  <% if alert.present? %>
+    <p style="color: #f87171; background: rgba(248, 113, 113, 0.1); padding: 0.75rem 1rem; border-radius: 8px; font-weight: 600; border: 1px solid rgba(248, 113, 113, 0.2); margin: 0;"><%= alert %></p>
+  <% end %>
+
+  <!-- Card: Dados Cadastrais -->
+  <div style="background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 1.8rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 1rem; margin-bottom: 1.2rem;">
+      <h2 style="margin: 0; font-size: 1.4rem; color: #38bdf8;">👤 Meus Dados</h2>
+      <%= link_to "Editar Perfil", edit_cliente_registration_path, style: "color: #94a3b8; text-decoration: none; font-size: 0.85rem;" %>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem;">
+      <div>
+        <span style="color: #94a3b8; font-size: 0.85rem; display: block;">Nome:</span>
+        <strong style="color: #fff; font-size: 1rem;"><%= @cliente.nome.presence || "Não informado" %></strong>
+      </div>
+      <div>
+        <span style="color: #94a3b8; font-size: 0.85rem; display: block;">E-mail:</span>
+        <strong style="color: #fff; font-size: 1rem;"><%= @cliente.email %></strong>
+      </div>
+      <div>
+        <span style="color: #94a3b8; font-size: 0.85rem; display: block;">WhatsApp / Telefone:</span>
+        <strong style="color: #fff; font-size: 1rem;"><%= @cliente.telefone.presence || "Não informado" %></strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card: Histórico de Pedidos e PIX em Aberto -->
+  <div style="background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 1.8rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);">
+    <h2 style="margin: 0 0 1.2rem 0; font-size: 1.4rem; color: #38bdf8; border-bottom: 1px solid #334155; padding-bottom: 1rem;">📦 Meus Pedidos & Assinaturas</h2>
+
+    <% if @pedidos.empty? %>
+      <p style="color: #94a3b8; margin: 0;">Você ainda não possui nenhum pedido realizado.</p>
+    <% else %>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <% @pedidos.each do |pedido| %>
+          <div style="background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem;">
+                <strong style="color: #fff; font-size: 1.05rem;">Pedido #<%= pedido.id %></strong>
+                <span style="color: #94a3b8; font-size: 0.8rem;"><%= pedido.created_at.strftime("%d/%m/%Y às %H:%M") %></span>
+              </div>
+              
+              <div style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.4rem;">
+                <% pedido.item_pedidos.each do |item| %>
+                  <span>• <%= item.produto&.nome %> (x<%= item.quantidade %>) </span>
+                <% end %>
+              </div>
+
+              <div>
+                <strong style="color: #38bdf8; font-size: 1.1rem;"><%= number_to_currency(pedido.total, unit: "R$ ", separator: ",", delimiter: ".") %></strong>
+              </div>
+            </div>
+
+            <!-- Status e Ações -->
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <% case pedido.status %>
+              <% when "approved" %>
+                <span style="background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); padding: 0.35rem 0.8rem; border-radius: 9999px; font-weight: 700; font-size: 0.85rem;">
+                  ✓ Aprovado
+                </span>
+              <% when "cancelled" %>
+                <span style="background: rgba(248, 113, 113, 0.15); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); padding: 0.35rem 0.8rem; border-radius: 9999px; font-weight: 700; font-size: 0.85rem;">
+                  ✕ Cancelado
+                </span>
+              <% else %>
+                <span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.35rem 0.8rem; border-radius: 9999px; font-weight: 700; font-size: 0.85rem;">
+                  ⏳ Aguardando PIX
+                </span>
+                <%= link_to "Pagar PIX", pedido_path(pedido), style: "background: #10b981; color: #fff; padding: 0.4rem 0.9rem; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.85rem;" %>
+                <%= button_to "Cancelar", cancelar_pedido_path(pedido), method: :patch, data: { turbo_confirm: "Tem certeza que deseja cancelar este pedido?" }, style: "background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;" %>
+              <% end %>
+            </div>
+
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+</div>

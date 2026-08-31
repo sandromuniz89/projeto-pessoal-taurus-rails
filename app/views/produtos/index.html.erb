@@ -1,0 +1,58 @@
+<div style="background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 2.5rem; border-radius: 16px; margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: center;">
+  <div>
+    <h1 style="margin: 0; font-size: 2rem; font-weight: 800;">Novidades em Destaque</h1>
+    <p style="color: #94a3b8; margin: 0.5rem 0 0 0; font-size: 1rem;">Confira os melhores lançamentos com entrega rápida para todo o Brasil.</p>
+  </div>
+  <%= link_to "+ Cadastrar Produto (Admin)", new_produto_path, style: "background: #2563eb; color: #fff; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.85rem;" %>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem;">
+  <% @produtos.each do |produto| %>
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      
+      <div style="width: 100%; height: 220px; background-color: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+        <% if produto.imagem.attached? %>
+          <%= image_tag produto.imagem, style: "width: 100%; height: 100%; object-fit: cover;" %>
+        <% else %>
+          <span style="font-size: 3rem; color: #94a3b8;">📦</span>
+        <% end %>
+      </div>
+
+      <div style="padding: 1.2rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <h2 style="font-size: 1.1rem; font-weight: 700; margin: 0 0 0.4rem 0; color: #0f172a;">
+            <%= produto.nome %>
+          </h2>
+          <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 1rem 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+            <%= produto.descricao.presence || "Sem descrição disponível." %>
+          </p>
+        </div>
+
+        <div>
+          <div style="margin-bottom: 1rem;">
+            <span style="font-size: 1.4rem; font-weight: 800; color: #0f172a; display: block;">
+              <%= number_to_currency(produto.preco, unit: "R$ ", separator: ",", delimiter: ".") %>
+            </span>
+          <small style="color: #10b981; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem;">
+              ⚡ Pagamento instantâneo via PIX
+          </small>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <%= link_to "Ver Produto", produto_path(produto), style: "flex: 1; text-align: center; background: #2563eb; color: #fff; text-decoration: none; padding: 0.7rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem;" %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if @produtos.empty? %>
+  <div style="text-align: center; padding: 4rem 1rem; color: #64748b; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e1;">
+    <p style="font-size: 2.5rem; margin: 0;">🛒</p>
+    <h3 style="margin: 0.5rem 0; color: #0f172a;">Nenhum produto cadastrado na vitrine</h3>
+    <p style="margin: 0 0 1.5rem 0;">Cadastre seus primeiros produtos para montar o catálogo.</p>
+    <%= link_to "Cadastrar Primeiro Produto", new_produto_path, style: "background: #2563eb; color: #fff; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: bold;" %>
+  </div>
+<% end %>

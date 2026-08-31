@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Taurus Entretenimento</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" if defined?(stylesheet_link_tag) %>
+    <%= javascript_importmap_tags %>
+
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --bg-store: #0f172a;
+        --card-bg: #1e293b;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border: #334155;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background-color: var(--bg-store);
+        color: var(--text-main);
+      }
+
+      .store-navbar {
+        background: #111827;
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .store-brand {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #38bdf8;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .store-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+      }
+
+      .user-account-btn {
+        color: #cbd5e1;
+        font-size: 0.9rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 8px;
+        background: rgba(56, 189, 248, 0.08);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        transition: background 0.2s, border-color 0.2s;
+      }
+
+      .user-account-btn:hover {
+        background: rgba(56, 189, 248, 0.15);
+        border-color: rgba(56, 189, 248, 0.4);
+      }
+
+      .cart-btn {
+        background: #1e293b;
+        border: 1px solid var(--border);
+        padding: 0.5rem 1.1rem;
+        border-radius: 9999px;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: background 0.2s;
+      }
+
+      .cart-btn:hover {
+        background: #334155;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="store-navbar">
+      <a href="/" class="store-brand">🛍️ Taurus Entretenimento</a>
+
+      <div class="store-actions">
+        <% if cliente_signed_in? %>
+          <%= link_to minha_conta_path, class: "user-account-btn" do %>
+            <span>👤 Olá, <strong style="color: #38bdf8;"><%= current_cliente.nome.presence || current_cliente.email.split('@').first %></strong></span>
+          <% end %>
+
+          <%= button_to "Sair", destroy_cliente_session_path, method: :delete, style: "background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 0.45rem 0.9rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600;" %>
+        <% else %>
+          <%= link_to "Entrar", new_cliente_session_path, style: "color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 0.9rem;" %>
+          <%= link_to "Criar Conta", new_cliente_registration_path, style: "background: #2563eb; color: #fff; padding: 0.5rem 1.1rem; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.85rem;" %>
+        <% end %>
+
+        <%= link_to carrinho_path, class: "cart-btn" do %>
+          🛒 Carrinho (<%= @carrinho ? @carrinho.total_itens : 0 %>)
+        <% end %>
+      </div>
+    </header>
+
+    <main class="container">
+      <%= yield %>
+    </main>
+  </body>
+</html>
