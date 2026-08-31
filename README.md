@@ -20,7 +20,7 @@ Disparo em background via ActionMailer e fila assíncrona com template HTML cust
 
 ### 4. Carrinho de Compras
 Gerenciamento de múltiplos itens, cálculo automático de totais e remoção em tempo real.
-![Carrinho de Compras](https://i.postimg.cc/c4gYMxy8/carrinho.png)
+![Carrinho de Compras](https://i.postimg.cc/mDrxK6BN/multiplos.png)
 
 ### 5. Checkout PIX Integrado (Mercado Pago)
 Geração instantânea do QR Code dinâmico e chave Copia e Cola com botão de cópia em 1 clique.
